@@ -246,6 +246,48 @@ def download_stock_pdf():
         as_attachment=True
     )
 
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_car(id):
+    conn = sqlite3.connect('cars.db')
+    c = conn.cursor()
+
+    if request.method == 'POST':
+        data = (
+            request.form['year'],
+            request.form['brand'],
+            request.form['model'],
+            request.form['colour'],
+            request.form['vin'],
+            request.form['engine_number'],
+            request.form['register_number'],
+            request.form['registration_number'],
+            float(request.form['purchase_price']),
+            float(request.form['selling_price']),
+            id
+        )
+        c.execute('''UPDATE cars SET
+            year=?, brand=?, model=?, colour=?, vin=?, engine_number=?,
+            register_number=?, registration_number=?, purchase_price=?, selling_price=?
+            WHERE id=?''', data)
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+
+    c.execute("SELECT * FROM cars WHERE id=?", (id,))
+    car = c.fetchone()
+    conn.close()
+    return render_template('edit_car.html', car=car)
+
+@app.route('/delete/<int:id>')
+def delete_car(id):
+    conn = sqlite3.connect('cars.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM recons WHERE car_id=?", (id,))
+    c.execute("DELETE FROM cars WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

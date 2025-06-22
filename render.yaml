@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: ww-group-car-tracker
-    runtime: python
+    name: wwgroupmanagement
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
-    pythonVersion: 3.11
-    envVars:
-      - key: FLASK_ENV
-        value: production
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    plan: free
+    runtime: python
+    branch: main
+    repo: https://github.com/Thaveshan/wwgroupmanagement
