@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WW Group - Car Stock</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header><h1>WW Group - Car Stock Management</h1></header>
+<div class="container">
+    <a href="/add">+ Add Car</a> | <a href="/sold">View Sold Cars</a>
+    <table>
+        <tr><th>Brand</th><th>Model</th><th>Year</th><th>VIN</th><th>Actions</th></tr>
+        {% for car in cars %}
+        <tr>
+            <td>{{ car[2] }}</td>
+            <td>{{ car[3] }}</td>
+            <td>{{ car[1] }}</td>
+            <td>{{ car[5] }}</td>
+            <td><a href="/car/{{ car[0] }}">View</a> | <a href="/sell/{{ car[0] }}">Sell</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<footer>WW Group &copy; 2025</footer>
+</body>
+</html>

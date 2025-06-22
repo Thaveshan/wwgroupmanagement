@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WW Group - Sold Cars</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header><h1>WW Group - Sold Cars</h1></header>
+<div class="container">
+    <a href="/">← Back</a>
+    <table>
+        <tr><th>Car</th><th>Purchase</th><th>Recon</th><th>Selling</th><th>Profit</th></tr>
+        {% for item in sold_data %}
+        <tr>
+            <td>{{ item.car }}</td>
+            <td>R{{ item.purchase }}</td>
+            <td>R{{ item.recon }}</td>
+            <td>R{{ item.selling }}</td>
+            <td style="color: green;">R{{ item.profit }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<footer>WW Group &copy; 2025</footer>
+</body>
+</html>
