@@ -9,13 +9,15 @@
 <div class="container">
     <a href="/add">+ Add Car</a> | <a href="/sold">View Sold Cars</a> | <a href="/stock">View Stock </a>
     <table>
-        <tr><th>Brand</th><th>Model</th><th>Year</th><th>VIN</th><th>Actions</th></tr>
+        <tr><th>Brand</th><th>Model</th><th>Year</th><th>VIN</th><th>Total Cost</th><th>Selling Price</th><th>Actions</th></tr>
         {% for car in cars %}
         <tr>
             <td>{{ car[2] }}</td>
             <td>{{ car[3] }}</td>
             <td>{{ car[1] }}</td>
             <td>{{ car[5] }}</td>
+            <td>{{ car[9] }}</td>
+            <td>{{ car[10] }}</td>
             <td><a href="/car/{{ car[0] }}">View</a> | <a href="/sell/{{ car[0] }}">Sell</a></td>
         </tr>
         {% endfor %}
