@@ -1,5 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import sqlite3
+import io
+import pandas as pd
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 
@@ -148,6 +152,99 @@ def update_price(id):
     conn.close()
     return redirect(url_for('car_detail', id=id))
 
+@app.route('/stock')
+def stock_on_hand():
+    conn = sqlite3.connect('cars.db')
+    c = conn.cursor()
+    c.execute("SELECT id, year, brand, model, colour, purchase_price, selling_price FROM cars WHERE is_sold=0")
+    cars = c.fetchall()
+    conn.close()
+    return render_template('stock.html', cars=cars)
+
+# --- Stock Report Downloads ---
+
+@app.route('/stock/download/csv')
+def download_stock_csv():
+    conn = sqlite3.connect('cars.db')
+    df = pd.read_sql_query("SELECT id, year, brand, model, colour, purchase_price, selling_price FROM cars WHERE is_sold=0", conn)
+    conn.close()
+
+    csv_data = df.to_csv(index=False)
+    return send_file(
+        io.BytesIO(csv_data.encode()),
+        mimetype='text/csv',
+        download_name='stock_report.csv',
+        as_attachment=True
+    )
+
+@app.route('/stock/download/excel')
+def download_stock_excel():
+    conn = sqlite3.connect('cars.db')
+    df = pd.read_sql_query("SELECT id, year, brand, model, colour, purchase_price, selling_price FROM cars WHERE is_sold=0", conn)
+    conn.close()
+
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Stock')
+    output.seek(0)
+
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        download_name='stock_report.xlsx',
+        as_attachment=True
+    )
+
+
+@app.route('/stock/download/pdf')
+def download_stock_pdf():
+    conn = sqlite3.connect('cars.db')
+    c = conn.cursor()
+    c.execute("SELECT id, year, brand, model, colour, purchase_price, selling_price FROM cars WHERE is_sold=0")
+    data = c.fetchall()
+    conn.close()
+
+    output = io.BytesIO()
+    p = canvas.Canvas(output, pagesize=letter)
+    width, height = letter
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(30, height - 40, "WW Group - Stock On Hand Report")
+
+    p.setFont("Helvetica", 10)
+    y = height - 70
+    row_height = 15
+
+    headers = ["ID", "Year", "Brand", "Model", "Colour", "Purchase Price", "Selling Price"]
+    x_positions = [30, 70, 110, 170, 230, 290, 380]
+
+    # Draw headers
+    for i, header in enumerate(headers):
+        p.drawString(x_positions[i], y, header)
+    y -= row_height
+
+    # Draw rows
+    for row in data:
+        if y < 40:
+            p.showPage()
+            y = height - 40
+        for i, item in enumerate(row):
+            if isinstance(item, float):
+                text = f"R{item:.2f}"
+            else:
+                text = str(item)
+            p.drawString(x_positions[i], y, text)
+        y -= row_height
+
+    p.save()
+    output.seek(0)
+
+    return send_file(
+        output,
+        mimetype='application/pdf',
+        download_name='stock_report.pdf',
+        as_attachment=True
+    )
 
 
 if __name__ == '__main__':

@@ -85,3 +85,23 @@ a {
     font-weight: 600;
     margin-right: 15px;
 }
+
+
+.download-buttons {
+    margin-bottom: 20px;
+}
+
+.download-buttons .btn {
+    display: inline-block;
+    background-color: #003366;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.download-buttons .btn:hover {
+    background-color: #00509e;
+}

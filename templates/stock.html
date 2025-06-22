@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WW Group - Stock On Hand</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+    <h1>WW Group - Stock On Hand</h1>
+    <a href="/">← Back to Home</a>
+</header>
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Year</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Colour</th>
+                <th>Purchase Price</th>
+                <th>Selling Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr>
+                <td>{{ car[0] }}</td>
+                <td>{{ car[1] }}</td>
+                <td>{{ car[2] }}</td>
+                <td>{{ car[3] }}</td>
+                <td>{{ car[4] }}</td>
+                <td>R{{ "%.2f"|format(car[5]) }}</td>
+                <td>R{{ "%.2f"|format(car[6]) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<div class="download-buttons">
+    <a href="/stock/download/csv" class="btn">Download CSV</a>
+    <a href="/stock/download/excel" class="btn">Download Excel</a>
+    <a href="/stock/download/pdf" class="btn">Download PDF</a>
+</div>
+
+</div>
+<footer>WW Group &copy; 2025</footer>
+</body>
+</html>
