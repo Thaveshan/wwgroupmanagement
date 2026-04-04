@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>📊 Profit Dashboard</h1>
+
+<h2>Total Profit: R{{ total_profit }}</h2>
+<h3>Cars Sold: {{ total_sales }}</h3>
+
+<hr>
+
+<h2>Profit per Car</h2>
+<canvas id="profitChart"></canvas>
+
+<hr>
+
+<h2>Monthly Profit Trend</h2>
+<canvas id="monthlyChart"></canvas>
+
+<script>
+    // Bar Chart
+    const ctx = document.getElementById('profitChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels | tojson }},
+            datasets: [{
+                label: 'Profit (R)',
+                data: {{ profits | tojson }},
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Line Chart
+    const ctx2 = document.getElementById('monthlyChart');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: {{ months | tojson }},
+            datasets: [{
+                label: 'Monthly Profit',
+                data: {{ monthly_values | tojson }},
+                fill: false,
+                tension: 0.3
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>

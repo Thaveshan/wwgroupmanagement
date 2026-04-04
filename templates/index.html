@@ -7,17 +7,17 @@
 <body>
 <header><h1>WW Group - Car Stock Management</h1></header>
 <div class="container">
-    <a href="/add">+ Add Car</a> | <a href="/sold">View Sold Cars</a> | <a href="/stock">View Stock </a>
+    <a href="/add">+ Add Car</a> | <a href="/sold">View Sold Cars</a> | <a href="/stock">View Stock </a> | <a href="{{ url_for('dashboard') }}">Dashboard</a>
     <table>
         <tr><th>Brand</th><th>Model</th><th>Year</th><th>VIN</th><th>Total Cost</th><th>Selling Price</th><th>Actions</th></tr>
         {% for car in cars %}
         <tr>
-            <td>{{ car[2] }}</td>
-            <td>{{ car[3] }}</td>
-            <td>{{ car[1] }}</td>
-            <td>{{ car[5] }}</td>
-            <td>{{ car[9] }}</td>
-            <td>{{ car[10] }}</td>
+            <td>{{ car.brand }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.year }}</td>
+            <td>{{ car.vin }}</td>
+            <td>{{ car.purchase_price }}</td>
+            <td>{{ car.selling_price }}</td>
             <td><a href="/car/{{ car[0] }}">View</a> | <a href="/sell/{{ car[0] }}">Sell</a></td>
         </tr>
         {% endfor %}
