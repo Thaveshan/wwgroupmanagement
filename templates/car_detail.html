@@ -6,39 +6,51 @@
 </head>
 <body>
 <header><h1>WW Group - Car Details</h1></header>
+
 <div class="container">
-    <p><strong>{{ car[2] }} {{ car[3] }} ({{ car[1] }})</strong></p>
-    <p><strong>Colour:</strong> {{ car[4] }} | <strong>VIN:</strong> {{ car[5] }}</p>
-    <p><strong>Engine:</strong> {{ car[6] }} | <strong>Reg #:</strong> {{ car[8] }}</p>
-    <p><strong>Purchase:</strong> R{{ car[9] }} | <strong>Selling:</strong> R{{ car[10] }}</p>
-    <p><strong>Total Recon:</strong> R{{ total_recon }} | <strong>Profit:</strong> R{{ profit }}</p>
+    <h2>{{ car.brand }} {{ car.model }} ({{ car.year }})</h2>
+
+    <p><strong>Colour:</strong> {{ car.colour }} | <strong>VIN:</strong> {{ car.vin }}</p>
+    <p><strong>Engine:</strong> {{ car.engine_number }} | <strong>Reg #:</strong> {{ car.register_number }}</p>
+
+    <p>
+        <strong>Purchase:</strong> R{{ car.purchase_price }} |
+        <strong>Selling:</strong> R{{ car.selling_price }}
+    </p>
+
+    <p>
+        <strong>Total Recon:</strong> R{{ total_recon }} |
+        <strong>Profit:</strong> R{{ profit }}
+    </p>
 
     <h3>Reconditioning</h3>
+
     <table>
         {% for item in recons %}
-        <tr><td>{{ item[0] }}</td><td>R{{ item[1] }}</td></tr>
+        <tr>
+            <td>{{ item.description }}</td>
+            <td>R{{ item.amount }}</td>
+        </tr>
         {% endfor %}
     </table>
 
-  <div>
-  <form method="POST">
-    <input name="description" placeholder="Recon Description" required>
-    <input type="number" step="0.01" name="amount" placeholder="Amount" required>
-    <button type="submit">Add Recon</button>
-  </form>
+    <form method="POST">
+        <input name="description" placeholder="Recon Description" required>
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+        <button type="submit">Add Recon</button>
+    </form>
+
+    <h3>Update Selling Price</h3>
+
+    <form method="POST" action="{{ url_for('update_price', car_id=car.id) }}">
+        <input type="number" step="0.01" name="selling_price" placeholder="New Selling Price" required>
+        <button type="submit">Update Price</button>
+    </form>
+
+    <br>
+    <a href="/stock">← Back to Stock</a>
 </div>
 
-<h3>Update Selling Price</h3>
-<div>
-  <form method="POST" action="/update_price/{{ car[0] }}">
-    <input type="number" step="0.01" name="selling_price" placeholder="New Selling Price" required>
-    <button type="submit">Update Price</button>
-  </form>
-</div>
-
-
-    <a href="/">← Back to Stock</a>
-</div>
 <footer>WW Group &copy; 2025</footer>
 </body>
 </html>

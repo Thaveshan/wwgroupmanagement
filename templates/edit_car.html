@@ -11,16 +11,16 @@
     
     <h2>Edit Car</h2>
     <form method="POST">
-      <input name="year" value="{{ car[1] }}" placeholder="Year" required>
-      <input name="brand" value="{{ car[2] }}" placeholder="Brand" required>
-      <input name="model" value="{{ car[3] }}" placeholder="Model" required>
-      <input name="colour" value="{{ car[4] }}" placeholder="Colour" required>
-      <input name="vin" value="{{ car[5] }}" placeholder="VIN Number" required>
-      <input name="engine_number" value="{{ car[6] }}" placeholder="Engine Number" required>
-      <input name="register_number" value="{{ car[7] }}" placeholder="Register Number" required>
-      <input name="registration_number" value="{{ car[8] }}" placeholder="Registration Number" required>
-      <input type="number" step="0.01" name="purchase_price" value="{{ car[9] }}" placeholder="Purchase Price" required>
-      <input type="number" step="0.01" name="selling_price" value="{{ car[10] }}" placeholder="Selling Price" required>
+      <input name="year" value="{{ car.year }}" placeholder="Year" required>
+      <input name="brand" value="{{ car.brand }}" placeholder="Brand" required>
+      <input name="model" value="{{ car.model }}" placeholder="Model" required>
+      <input name="colour" value="{{ car.colour }}" placeholder="Colour" required>
+      <input name="vin" value="{{ car.vin }}" placeholder="VIN Number" required>
+      <input name="engine_number" value="{{ car.engine_number }}" placeholder="Engine Number" required>
+      <input name="register_number" value="{{ car.register_number }}" placeholder="Register Number" required>
+      <input name="registration_number" value="{{ car.registration_number }}" placeholder="Registration Number" required>
+      <input type="number" step="0.01" name="purchase_price" value="{{ car.purchase_price }}" placeholder="Purchase Price" required>
+      <input type="number" step="0.01" name="selling_price" value="{{ car.selling_price }}" placeholder="Selling Price" required>
       <button type="submit">Update Car</button>
     </form>
 </div>

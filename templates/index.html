@@ -18,7 +18,10 @@
             <td>{{ car.vin }}</td>
             <td>{{ car.purchase_price }}</td>
             <td>{{ car.selling_price }}</td>
-            <td><a href="/car/{{ car[0] }}">View</a> | <a href="/sell/{{ car[0] }}">Sell</a></td>
+            <td>
+                <a href="{{ url_for('car_detail', car_id=car.id) }}" class="btn-small">View</a>
+                <a href="{{ url_for('sell_car', car_id=car.id) }}" class="btn-small danger">Sell</a>
+            </td>        
         </tr>
         {% endfor %}
     </table>
