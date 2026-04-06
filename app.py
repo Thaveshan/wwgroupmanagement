@@ -317,6 +317,113 @@ def dashboard():
         months=list(monthly_profit.keys()) or [],
         monthly_values=list(monthly_profit.values()) or []
     )
+    
+@app.route('/download/csv')
+def download_csv():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM cars")
+    cars = fetch_dicts(cur)
+
+    import pandas as pd
+    df = pd.DataFrame(cars)
+
+    file_path = "cars.csv"
+    df.to_csv(file_path, index=False)
+
+    cur.close()
+    conn.close()
+
+    return send_file(file_path, as_attachment=True)
+
+@app.route('/download/excel')
+def download_excel():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM cars")
+    cars = fetch_dicts(cur)
+
+    import pandas as pd
+    df = pd.DataFrame(cars)
+
+    file_path = "cars.xlsx"
+    df.to_excel(file_path, index=False)
+
+    cur.close()
+    conn.close()
+
+    return send_file(file_path, as_attachment=True)
+
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+
+@app.route('/download/pdf')
+def download_pdf():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM cars WHERE is_sold = FALSE")
+    cars = fetch_dicts(cur)
+
+    cur.close()
+    conn.close()
+
+    file_path = "cars_report.pdf"
+
+    doc = SimpleDocTemplate(file_path, pagesize=letter)
+    elements = []
+
+    styles = getSampleStyleSheet()
+
+    # Title
+    elements.append(Paragraph("WW Group - Stock Report", styles['Title']))
+    elements.append(Spacer(1, 12))
+
+    # Table Data (HEADER FIRST)
+    data = [[
+        "Brand", "Model", "Year", "VIN",
+        "Total Cost", "Selling Price"
+    ]]
+
+    # Add rows
+    for car in cars:
+        data.append([
+            car['brand'],
+            car['model'],
+            str(car['year']),
+            car['vin'],
+            f"R{car['purchase_price']:,.2f}",
+            f"R{car['selling_price']:,.2f}"
+        ])
+
+    # Create Table
+    table = Table(data)
+
+    # Style it nicely
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+
+        ('ALIGN', (4, 1), (-1, -1), 'RIGHT'),
+
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+
+        ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.lightgrey]),
+    ]))
+
+    elements.append(table)
+
+    doc.build(elements)
+
+    return send_file(file_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
